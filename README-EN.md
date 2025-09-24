@@ -1,24 +1,24 @@
 # UserSphere CLI
 
-🚀 **智能用户和设备管理命令行工具**
+🚀 **Intelligent User and Device Management Command Line Tool**
 
-**中文文档** | [English Documentation](README-EN.md)
+[中文文档](README.md) | **English Documentation**
 
-UserSphere CLI 是一个基于 RAG (Retrieval-Augmented Generation) 技术的智能命令行工具，使用本地 embedding 模型进行语义意图匹配，支持自然语言交互的用户和设备管理功能。
+UserSphere CLI is an intelligent command-line tool based on RAG (Retrieval-Augmented Generation) technology, using local embedding models for semantic intent matching and supporting natural language interaction for user and device management functions.
 
-## ✨ 特性
+## ✨ Features
 
-- 🧠 **智能语义理解**: 基于本地 embedding 模型的自然语言处理
-- 🔍 **高效向量检索**: 使用 FAISS 进行快速相似度搜索
-- 🌐 **多语言支持**: 支持中文、英文等多语言交互
-- 💾 **持久化存储**: 自动缓存 embedding 结果，提升启动速度
-- 🎯 **意图匹配**: 精确的用户意图识别和动作执行
-- 🛠️ **模块化设计**: 遵循 Google TypeScript Style Guide
-- 🔧 **可扩展架构**: 支持动态添加新功能和语言模板
+- 🧠 **Intelligent Semantic Understanding**: Natural language processing based on local embedding models
+- 🔍 **Efficient Vector Retrieval**: Fast similarity search using FAISS
+- 🌐 **Multi-language Support**: Support for Chinese, English and other languages
+- 💾 **Persistent Storage**: Automatic caching of embedding results for faster startup
+- 🎯 **Intent Matching**: Precise user intent recognition and action execution
+- 🛠️ **Modular Design**: Following Google TypeScript Style Guide
+- 🔧 **Extensible Architecture**: Support for dynamic addition of new features and language templates
 
-## 🏗️ 系统架构
+## 🏗️ System Architecture
 
-### 📋 项目模块结构图
+### 📋 Project Module Structure Diagram
 
 ```mermaid
 graph TB
@@ -53,7 +53,7 @@ graph TB
     style FAISS fill:#f1f8e9
 ```
 
-### 🔄 系统工作流程图
+### 🔄 System Workflow Diagram
 
 ```mermaid
 sequenceDiagram
@@ -77,10 +77,10 @@ sequenceDiagram
     RAG-->>CLI: System ready
     
     Note over U,CACHE: 💬 User Interaction Loop
-    U->>CLI: "查询我的积分"
+    U->>CLI: "check my points"
     CLI->>RAG: Process query
     RAG->>ML: Detect language
-    ML-->>RAG: Language: zh (Chinese)
+    ML-->>RAG: Language: en (English)
     RAG->>EMB: Generate embedding
     EMB->>EMB: Call Qwen3 model
     EMB-->>RAG: Query embedding [1024-dim]
@@ -88,7 +88,7 @@ sequenceDiagram
     VEC->>VEC: FAISS L2 search
     VEC-->>RAG: Best match: getUserPoints (score: 0.07)
     RAG->>ACT: Execute getUserPoints()
-    ACT-->>RAG: "您的积分是 1280 分"
+    ACT-->>RAG: "Your points: 1280"
     RAG-->>CLI: Formatted response
     CLI-->>U: Display result
     
@@ -97,53 +97,53 @@ sequenceDiagram
     CACHE-->>RAG: Cache updated
 ```
 
-### 🏛️ 核心模块详解
+### 🏛️ Core Module Details
 
 ```
 src/
-├── 📱 index.ts              # CLI 入口点
-│   ├── 命令行参数解析
-│   ├── 用户交互界面
-│   └── 主程序循环
+├── 📱 index.ts              # CLI entry point
+│   ├── Command line parsing
+│   ├── User interaction interface
+│   └── Main program loop
 │
-├── 🎯 rag.ts               # RAG 核心系统
-│   ├── 系统初始化协调
-│   ├── 查询处理流程
-│   ├── 意图匹配逻辑
-│   └── 响应生成
+├── 🎯 rag.ts               # RAG core system
+│   ├── System initialization coordination
+│   ├── Query processing flow
+│   ├── Intent matching logic
+│   └── Response generation
 │
-├── 🧠 embedding.ts         # Embedding 服务
-│   ├── Qwen3 模型加载 (node-llama-cpp)
-│   ├── 文本向量化 (1024维)
-│   ├── 批量处理优化
-│   └── 资源管理
+├── 🧠 embedding.ts         # Embedding service
+│   ├── Qwen3 model loading (node-llama-cpp)
+│   ├── Text vectorization (1024-dim)
+│   ├── Batch processing optimization
+│   └── Resource management
 │
-├── 📊 vectorStore.ts       # 向量存储
-│   ├── FAISS 索引管理 (faiss-node)
-│   ├── L2 距离计算
-│   ├── 相似度搜索
-│   └── 批量向量操作
+├── 📊 vectorStore.ts       # Vector storage
+│   ├── FAISS index management (faiss-node)
+│   ├── L2 distance calculation
+│   ├── Similarity search
+│   └── Batch vector operations
 │
-├── ⚡ actions.ts           # 业务逻辑
-│   ├── 用户管理功能
-│   ├── 设备管理功能
-│   ├── 系统功能
-│   └── 动态参数处理
+├── ⚡ actions.ts           # Business logic
+│   ├── User management functions
+│   ├── Device management functions
+│   ├── System functions
+│   └── Dynamic parameter handling
 │
-├── 🌐 multilang.ts        # 多语言管理
-│   ├── 语言检测
-│   ├── 意图模板管理 (341个)
-│   ├── 7种语言支持
-│   └── 动态模板扩展
+├── 🌐 multilang.ts        # Multi-language management
+│   ├── Language detection
+│   ├── Intent template management (341 templates)
+│   ├── 7 language support
+│   └── Dynamic template extension
 │
-└── 💾 persistence.ts      # 持久化存储
-    ├── Embedding 缓存
-    ├── 元数据管理
-    ├── 缓存验证
-    └── 增量更新
+└── 💾 persistence.ts      # Persistent storage
+    ├── Embedding cache
+    ├── Metadata management
+    ├── Cache validation
+    └── Incremental updates
 ```
 
-### 🛠️ 技术栈架构图
+### 🛠️ Technology Stack Architecture
 
 ```mermaid
 graph LR
@@ -199,12 +199,12 @@ graph LR
     style MODEL fill:#fce4ec
 ```
 
-### 📊 数据流架构图
+### 📊 Data Flow Architecture
 
 ```mermaid
 flowchart TD
     subgraph "Input Processing"
-        A["👤 User Input<br/>查询我的积分"] --> B["🔍 Language Detection<br/>Chinese: 50%"]
+        A["👤 User Input<br/>check my points"] --> B["🔍 Language Detection<br/>English: 90%"]
         B --> C["🧠 Text to Embedding<br/>Qwen3 Model"]
         C --> D["📐 Vector<br/>1024 dimensions"]
     end
@@ -220,11 +220,11 @@ flowchart TD
     subgraph "Action Execution"
         H --> J["⚡ Execute Action<br/>getUserPoints"]
         J --> K["💼 Business Logic<br/>Fetch user data"]
-        K --> L["📝 Generate Response<br/>您的积分是 1280 分"]
+        K --> L["📝 Generate Response<br/>Your points: 1280"]
     end
     
     subgraph "Response Generation"
-        L --> M["🌐 Localize Response<br/>Chinese format"]
+        L --> M["🌐 Localize Response<br/>English format"]
         I --> M
         M --> N["📱 CLI Output<br/>Formatted display"]
     end
@@ -242,7 +242,7 @@ flowchart TD
     style O fill:#f1f8e9
 ```
 
-### ⚡ 性能指标架构图
+### ⚡ Performance Metrics Architecture
 
 ```mermaid
 graph TD
@@ -282,7 +282,7 @@ graph TD
     style S1 fill:#f3e5f5
 ```
 
-### 🔧 扩展架构图
+### 🔧 Extension Architecture
 
 ```mermaid
 graph TB
@@ -322,118 +322,118 @@ graph TB
     style INT1 fill:#e8f5e8
 ```
 
-## 📦 安装
+## 📦 Installation
 
-### 前置要求
+### Prerequisites
 
 - Node.js >= 18.0.0
-- 内存 >= 4GB (用于加载 embedding 模型)
-- 支持的操作系统: macOS, Linux, Windows
+- Memory >= 4GB (for loading embedding models)
+- Supported OS: macOS, Linux, Windows
 
-### 1. 克隆项目
+### 1. Clone Repository
 
 ```bash
-# SSH 方式 (推荐)
+# SSH method (recommended)
 git clone git@github.com:HeiSir2014/UserSphere.git
 cd UserSphere
 
-# 或使用 HTTPS 方式
+# Or use HTTPS method
 git clone https://github.com/HeiSir2014/UserSphere.git
 cd UserSphere
 ```
 
-### 2. 安装依赖
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. 下载 Embedding 模型
+### 3. Download Embedding Models
 
-在项目根目录创建 `models` 文件夹并下载模型：
+Create `models` folder in project root and download models:
 
 ```bash
 mkdir models
 cd models
 
-# 选项 1: Qwen3 Embedding 模型 (推荐，1024维)
-# 来源: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/
+# Option 1: Qwen3 Embedding Model (Recommended, 1024-dim)
+# Source: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/
 wget https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
-# 或使用 curl
+# Or use curl
 curl -L -O https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
 
-# 选项 2: EmbeddingGemma 模型 (备选，768维)
-# 来源: https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/
+# Option 2: EmbeddingGemma Model (Alternative, 768-dim)
+# Source: https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/
 wget https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-Q8_0.gguf
-# 或使用 curl
+# Or use curl
 curl -L -O https://huggingface.co/unsloth/embeddinggemma-300m-GGUF/resolve/main/embeddinggemma-300M-Q8_0.gguf
 ```
 
-### 4. 构建项目
+### 4. Build Project
 
 ```bash
 npm run build
 ```
 
-### 5. 启动应用
+### 5. Start Application
 
 ```bash
 npm start
-# 或
+# or
 ./dist/index.js
 ```
 
-## 🚀 使用方法
+## 🚀 Usage
 
-### 基本命令
+### Basic Commands
 
 ```bash
-# 启动 CLI
+# Start CLI
 usersphere
 
-# 指定模型文件
+# Specify model file
 usersphere --model ./models/qwen3-embedding-0.6b.gguf
 
-# 启用性能统计
+# Enable performance statistics
 usersphere --timings
 
-# 禁用彩色输出
+# Disable colored output
 usersphere --no-color
 
-# 查看帮助
+# Show help
 usersphere --help
 ```
 
-### 交互示例
+### Interactive Examples
 
 ```bash
-> 查询我的积分
-🤖 您的积分是 1280 分
+> check my points
+🤖 Your points: 1280
 
-> 我有哪些设备？
-🤖 当前绑定的设备 (4 个):
-  • MacBook-Pro (laptop) - 在线
-  • iPhone-15 (mobile) - 在线
-  • iPad-Air (tablet) - 离线
-  • iMac-2021 (desktop) - 在线
+> what devices do I have?
+🤖 Current bound devices (4):
+  • MacBook-Pro (laptop) - online
+  • iPhone-15 (mobile) - online
+  • iPad-Air (tablet) - offline
+  • iMac-2021 (desktop) - online
 
-> iPhone 在线吗？
-🤖 设备状态:
-  • iPhone-15 (mobile) - 在线 - IP: 192.168.1.101
+> is iPhone online?
+🤖 Device status:
+  • iPhone-15 (mobile) - online - IP: 192.168.1.101
 
-> 添加设备 Samsung-Galaxy
-🤖 设备 "Samsung-Galaxy" 已成功添加 (状态: 在线)。
+> add device Samsung-Galaxy
+🤖 Device "Samsung-Galaxy" has been successfully added (status: online).
 
 > help
-🤖 UserSphere CLI 可用功能:
+🤖 UserSphere CLI available functions:
 ...
 ```
 
-## 🌐 多语言支持
+## 🌐 Multi-language Support
 
-UserSphere CLI 支持多语言交互，系统会自动识别语言并匹配相应的功能：
+UserSphere CLI supports multi-language interaction, the system automatically recognizes language and matches corresponding functions:
 
-### 中文示例
+### Chinese Examples
 ```bash
 > 查询积分
 > 我的用户名是什么
@@ -449,178 +449,178 @@ UserSphere CLI 支持多语言交互，系统会自动识别语言并匹配相�
 > iPhone status
 ```
 
-### 支持的功能类别
+### Supported Function Categories
 
-| 功能类别 | 中文示例 | English Example |
+| Function Category | Chinese Example | English Example |
 |---------|---------|-----------------|
-| 用户信息 | 查询积分、用户名、头像 | check points, username, avatar |
-| 设备管理 | 列出设备、设备状态、添加设备 | list devices, device status, add device |
-| 系统功能 | 帮助、系统信息、退出 | help, system info, exit |
+| User Info | 查询积分、用户名、头像 | check points, username, avatar |
+| Device Management | 列出设备、设备状态、添加设备 | list devices, device status, add device |
+| System Functions | 帮助、系统信息、退出 | help, system info, exit |
 
-## 🛠️ 开发
+## 🛠️ Development
 
-### 项目结构
+### Project Structure
 
 ```
 src/
-├── embedding.ts     # Embedding 服务封装
-├── vectorStore.ts   # 向量存储和检索
-├── rag.ts          # RAG 逻辑和意图匹配
-├── actions.ts      # 业务逻辑动作实现
-├── multilang.ts    # 多语言支持模块
-├── persistence.ts  # 持久化存储模块
-└── index.ts        # CLI 入口点
+├── embedding.ts     # Embedding service wrapper
+├── vectorStore.ts   # Vector storage and retrieval
+├── rag.ts          # RAG logic and intent matching
+├── actions.ts      # Business logic action implementation
+├── multilang.ts    # Multi-language support module
+├── persistence.ts  # Persistent storage module
+└── index.ts        # CLI entry point
 
-data/               # 数据存储目录
-├── embeddings.json # 缓存的 embedding 数据
-├── intents.json    # 意图模板配置
-└── faiss.index     # FAISS 索引文件
+data/               # Data storage directory
+├── embeddings.json # Cached embedding data
+├── intents.json    # Intent template configuration
+└── faiss.index     # FAISS index file
 ```
 
-### 开发命令
+### Development Commands
 
 ```bash
-# 开发模式运行
+# Run in development mode
 npm run dev
 
-# 构建项目
+# Build project
 npm run build
 
-# 代码检查
+# Code linting
 npm run lint
 
-# 修复代码风格
+# Fix code style
 npm run lint:fix
 
-# 清理构建文件
+# Clean build files
 npm run clean
 ```
 
-### 添加新功能
+### Adding New Features
 
-1. **添加新动作** (在 `actions.ts`):
+1. **Add new action** (in `actions.ts`):
 ```typescript
 export function newAction(param: string): string {
-  return `执行新功能: ${param}`;
+  return `Execute new feature: ${param}`;
 }
 ```
 
-2. **添加意图模板** (在 `rag.ts`):
+2. **Add intent template** (in `rag.ts`):
 ```typescript
 {
-  text: '新功能',
+  text: 'new feature',
   action: 'newAction',
-  description: '执行新功能',
+  description: 'Execute new feature',
   category: 'custom',
-  examples: ['执行新功能', 'run new feature'],
+  examples: ['new feature', 'run new feature'],
 }
 ```
 
-3. **重新构建和测试**:
+3. **Rebuild and test**:
 ```bash
 npm run build
 npm start
 ```
 
-## 🔧 配置
+## 🔧 Configuration
 
-### 环境变量
+### Environment Variables
 
 ```bash
-# 模型文件路径
+# Model file path
 USERSPHERE_MODEL_PATH=./models/qwen3-embedding-0.6b.gguf
 
-# 数据存储目录
+# Data storage directory
 USERSPHERE_DATA_DIR=./data
 
-# 相似度阈值 (0.0-1.0)
+# Similarity threshold (0.0-1.0)
 USERSPHERE_SIMILARITY_THRESHOLD=0.3
 
-# 启用调试模式
+# Enable debug mode
 USERSPHERE_DEBUG=true
 ```
 
-### 模型配置
+### Model Configuration
 
-支持的 embedding 模型：
+Supported embedding models:
 
-| 模型 | 维度 | 大小 | 推荐用途 |
+| Model | Dimensions | Size | Recommended Use |
 |------|------|------|----------|
-| qwen3-embedding:0.6b | 1024 | ~600MB | 通用推荐 |
-| embeddinggemma | 768 | ~1.2GB | 高精度场景 |
+| qwen3-embedding:0.6b | 1024 | ~600MB | General recommendation |
+| embeddinggemma | 768 | ~1.2GB | High precision scenarios |
 
-## 📊 性能优化
+## 📊 Performance Optimization
 
-### 首次启动优化
+### First Startup Optimization
 
-1. **Embedding 缓存**: 首次运行时计算并缓存所有意图的 embedding
-2. **FAISS 索引**: 保存 FAISS 索引到本地文件
-3. **快速加载**: 后续启动直接加载缓存数据
+1. **Embedding Cache**: Calculate and cache all intent embeddings on first run
+2. **FAISS Index**: Save FAISS index to local file
+3. **Fast Loading**: Subsequent startups directly load cached data
 
-### 内存优化
+### Memory Optimization
 
-- 模型加载: ~600MB - 1.2GB
-- FAISS 索引: ~10MB
-- 运行时内存: ~200MB
+- Model loading: ~600MB - 1.2GB
+- FAISS index: ~10MB
+- Runtime memory: ~200MB
 
-## 🐛 故障排除
+## 🐛 Troubleshooting
 
-### 常见问题
+### Common Issues
 
-**Q: 模型加载失败**
+**Q: Model loading failed**
 ```bash
-❌ 模型文件不存在或损坏
-💡 解决方案: 重新下载模型文件，确保文件完整性
+❌ Model file does not exist or is corrupted
+💡 Solution: Re-download model file, ensure file integrity
 ```
 
-**Q: 内存不足**
+**Q: Out of memory**
 ```bash
-❌ 加载模型时内存溢出
-💡 解决方案: 确保系统有足够内存 (推荐 4GB+)
+❌ Memory overflow when loading model
+💡 Solution: Ensure system has sufficient memory (recommended 4GB+)
 ```
 
-**Q: 意图识别不准确**
+**Q: Intent recognition inaccurate**
 ```bash
-❌ 系统无法理解用户输入
-💡 解决方案: 调整相似度阈值或添加更多意图模板
+❌ System cannot understand user input
+💡 Solution: Adjust similarity threshold or add more intent templates
 ```
 
-### 调试模式
+### Debug Mode
 
-启用详细日志：
+Enable verbose logging:
 ```bash
 USERSPHERE_DEBUG=true npm start
 ```
 
-## 🤝 贡献
+## 🤝 Contributing
 
-1. Fork 项目
-2. 创建功能分支: `git checkout -b feature/amazing-feature`
-3. 提交更改: `git commit -m 'Add amazing feature'`
-4. 推送分支: `git push origin feature/amazing-feature`
-5. 提交 Pull Request
+1. Fork the project
+2. Create feature branch: `git checkout -b feature/amazing-feature`
+3. Commit changes: `git commit -m 'Add amazing feature'`
+4. Push branch: `git push origin feature/amazing-feature`
+5. Submit Pull Request
 
-### 代码风格
+### Code Style
 
-项目遵循 [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)：
+The project follows [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html):
 
-- 使用 TypeScript strict 模式
-- 优先使用 `const` 和 `readonly`
-- 完整的类型注解
-- 详细的 JSDoc 注释
+- Use TypeScript strict mode
+- Prefer `const` and `readonly`
+- Complete type annotations
+- Detailed JSDoc comments
 
-## 📄 许可证
+## 📄 License
 
-MIT License - 详见 [LICENSE](LICENSE) 文件
+MIT License - see [LICENSE](LICENSE) file for details
 
-## 🙏 致谢
+## 🙏 Acknowledgments
 
-- [node-llama-cpp](https://github.com/withcatai/node-llama-cpp) - 本地 LLM 推理
-- [faiss-node](https://github.com/ewfian/faiss-node) - 高效向量检索
-- [Qwen](https://github.com/QwenLM/Qwen) - Embedding 模型
-- [Google Gemma](https://github.com/google/gemma) - Embedding 模型
+- [node-llama-cpp](https://github.com/withcatai/node-llama-cpp) - Local LLM inference
+- [faiss-node](https://github.com/ewfian/faiss-node) - Efficient vector retrieval
+- [Qwen](https://github.com/QwenLM/Qwen) - Embedding models
+- [Google Gemma](https://github.com/google/gemma) - Embedding models
 
-## 📞 支持
+## 📞 Support
 
 - 📧 Email: heisir21@163.com
 - 🐛 Issues: [GitHub Issues](https://github.com/HeiSir2014/UserSphere/issues)
