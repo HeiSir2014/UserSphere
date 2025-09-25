@@ -17,9 +17,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node --loader ts-node/esm src/index.ts",
+    "start": "npm run node-ts -- src/index.ts",
+    "start:gemma": "npm run node-ts -- src/index.ts --model ./models/embeddinggemma-300M-Q8_0.gguf",
     "start:build": "npm run build && node dist/index.js",
-    "start:ts": "ts-node --esm src/index.ts", 
     "dev": "node --loader ts-node/esm --watch src/index.ts",
     "test": "npm run build && node scripts/test-functionality.js",
     "test:real": "npm run build && node scripts/test-real-model.js",
@@ -32,7 +32,8 @@
     "clean": "rm -rf dist",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "setup": "npm run build && npm run test"
+    "setup": "npm run build && npm run test",
+    "node-ts": "node --loader ts-node/esm"
   },
   "keywords": [
     "cli",

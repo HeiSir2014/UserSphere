@@ -357,6 +357,10 @@ function parseArguments(): CLIConfig {
   const args = process.argv.slice(2);
   const config: any = {};
 
+  // Debug: log all arguments
+  console.log('Debug - process.argv:', process.argv);
+  console.log('Debug - args:', args);
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     
