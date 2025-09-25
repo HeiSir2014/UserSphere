@@ -402,6 +402,7 @@ export class RAGSystem {
         console.log(`Detected language: ${langDetection.language} (confidence: ${Math.round(langDetection.confidence * 100)}%)`);
       }
 
+      console.time('match-embedding');
       // Generate embedding for user input
       const queryEmbedding = await this.embeddingService.getEmbedding(trimmedInput);
       
@@ -411,6 +412,8 @@ export class RAGSystem {
         3, // Get top 3 matches for better analysis
         this.config.similarityThreshold
       );
+
+      console.timeEnd('match-embedding');
 
       if (searchResults.length === 0) {
         return await this.handleNoMatch(trimmedInput, queryEmbedding, startTime);

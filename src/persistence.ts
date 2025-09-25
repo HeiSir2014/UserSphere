@@ -151,7 +151,7 @@ export class PersistenceManager {
       };
 
       // Save to file
-      const jsonData = JSON.stringify(cacheData, null, 2);
+      const jsonData = JSON.stringify(cacheData, null, 0);
       await fs.promises.writeFile(this.embeddingsCacheFile, jsonData, 'utf8');
       
       // Save metadata separately
