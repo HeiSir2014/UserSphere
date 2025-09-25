@@ -19,6 +19,7 @@
     "build": "tsc",
     "start": "npm run node-ts -- src/index.ts",
     "start:gemma": "npm run node-ts -- src/index.ts --model ./models/embeddinggemma-300M-Q8_0.gguf",
+    "start:gemma:q4": "npm run node-ts -- src/index.ts --model ./models/embeddinggemma-300m-Q4_0.gguf",
     "start:build": "npm run build && node dist/index.js",
     "dev": "node --loader ts-node/esm --watch src/index.ts",
     "test": "npm run build && node scripts/test-functionality.js",
