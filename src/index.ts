@@ -138,6 +138,8 @@ class UserSphereCLI {
         this.colorize('确定要退出吗? (y/N): ', 'yellow'),
         (answer) => {
           if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
+            // Remove the close listener to avoid double cleanup
+            this.rl.removeAllListeners('close');
             this.handleExit();
           } else {
             console.log(this.colorize('继续使用 UserSphere CLI...', 'green'));
@@ -293,6 +295,9 @@ ${this.colorize('🔄 按 Ctrl+C 可以安全退出', 'dim')}
       return;
     }
 
+    // Set flag immediately to prevent multiple calls
+    this.isRunning = false;
+
     console.log(this.colorize('\n👋 感谢使用 UserSphere CLI，再见！', 'green'));
     
     // Clean up resources
@@ -303,7 +308,6 @@ ${this.colorize('🔄 按 Ctrl+C 可以安全退出', 'dim')}
     }
 
     this.rl.close();
-    this.isRunning = false;
     process.exit(0);
   }
 

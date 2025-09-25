@@ -5,7 +5,7 @@
  */
 
 import { EmbeddingService } from './embedding.js';
-import { VectorStore, Intent, createVectorStore } from './vectorStore.js';
+import { VectorStore, Intent, createCosineVectorStore } from './vectorStore.js';
 import { MultiLanguageManager, defaultMultiLangManager, SupportedLanguage } from './multilang.js';
 import { PersistenceManager, createPersistenceManager, CachedIntent } from './persistence.js';
 import * as Actions from './actions.js';
@@ -187,7 +187,8 @@ export class RAGSystem {
       contextSize: 2048,
     });
 
-    this.vectorStore = createVectorStore(this.config.embeddingDimension);
+    // Use cosine similarity for better semantic matching
+    this.vectorStore = createCosineVectorStore(this.config.embeddingDimension);
     
     // Initialize multi-language manager if enabled
     this.multiLangManager = this.config.enableMultiLanguage ? 
@@ -412,7 +413,10 @@ export class RAGSystem {
       );
 
       if (searchResults.length === 0) {
-        return await this.handleNoMatch(trimmedInput, startTime);
+        return await this.handleNoMatch(trimmedInput, queryEmbedding, startTime);
+      }
+      else {
+        console.log(`Found ${searchResults.length} matches, best match: ${searchResults[0]!.intent.text} (${searchResults[0]!.score.toFixed(4)})`);
       }
 
       // Use the best match
@@ -452,10 +456,11 @@ export class RAGSystem {
   /**
    * Handles cases where no intent match is found.
    * @param userInput - Original user input
+   * @param queryEmbedding - Pre-computed query embedding to avoid regeneration
    * @param startTime - Query start time for performance tracking
    * @returns RAG result for no match scenario
    */
-  private async handleNoMatch(userInput: string, startTime: number): Promise<RAGResult> {
+  private async handleNoMatch(_userInput: string, queryEmbedding: number[], startTime: number): Promise<RAGResult> {
     if (!this.config.enableFuzzyMatching) {
       return {
         success: false,
@@ -464,18 +469,20 @@ export class RAGSystem {
       };
     }
 
-    // Try fuzzy matching with relaxed threshold
+    // Try fuzzy matching with relaxed threshold using existing embedding
     const relaxedResults = this.vectorStore.search(
-      await this.embeddingService.getEmbedding(userInput),
+      queryEmbedding, // Reuse the already computed embedding
       1,
       0.1 // Much lower threshold for fuzzy matching
     );
 
     if (relaxedResults.length > 0) {
-      const fuzzyMatch = relaxedResults[0]!;
+      // sort by score
+      const sortedResults = relaxedResults.sort((a, b) => b.score - a.score);
+      const fuzzyMatch = sortedResults[0]!;
       return {
         success: false,
-        response: `我不太确定您的意思。您是否想要 "${fuzzyMatch.intent.text}"？\n请输入 "帮助" 查看所有可用功能。`,
+        response: `我不太确定您的意思。您是否想要 [${sortedResults.map(r => `"${r.intent.text}"(${r.score.toFixed(4)})`).join(', ')}]？\n请输入 "帮助" 查看所有可用功能。`,
         matchedIntent: fuzzyMatch.intent,
         confidence: fuzzyMatch.score,
         executionTime: Date.now() - startTime,
@@ -732,7 +739,7 @@ export async function createDefaultRAGSystem(modelPath: string): Promise<RAGSyst
   const config: RAGConfig = {
     modelPath,
     embeddingDimension: actualDimension,
-    similarityThreshold: 0.05, // Lower threshold for better matching
+    similarityThreshold: 0.65, // Higher threshold for cosine similarity (0-1 range)
     enableFuzzyMatching: true,
     enableMultiLanguage: true,
     enablePersistence: true,
